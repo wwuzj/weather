@@ -77,7 +77,6 @@ public class WeatherActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        Log.d("weather", "onCreate- ");
         super.onCreate(savedInstanceState);
 
         if(Build.VERSION.SDK_INT >= 21){
@@ -86,9 +85,7 @@ public class WeatherActivity extends AppCompatActivity {
                     View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
             getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
-
         setContentView(R.layout.activity_weather);
-
         weatherlayout = (ScrollView) findViewById(R.id.weather_layout);
         titleCity = (TextView) findViewById(R.id.title_city);
         titleUpdateTime = (TextView) findViewById(R.id.title_update_time);
@@ -104,61 +101,61 @@ public class WeatherActivity extends AppCompatActivity {
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         navButton = (Button) findViewById(R.id.nav_button);
 
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-                double latitude = location.getLatitude();
-                double longitude = location.getLongitude();
-                String districtName = getDistrictName(latitude, longitude);
-                Log.d("Location", "District: " + districtName);
-
-                if (isFirstLaunch) {
-                    requestWeather(getDistrictId(districtName));
+        if(isFirstLaunch){
+            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            locationListener = new LocationListener() {
+                @Override
+                public void onLocationChanged(Location location) {
+                    double latitude = location.getLatitude();
+                    double longitude = location.getLongitude();
+                    String districtName = getDistrictName(latitude, longitude);
+                    Toast.makeText(WeatherActivity.this, districtName, Toast.LENGTH_SHORT).show();
+                    requestWeather(getDistrictId("districName"));
                     stopLocationUpdates();
                     isFirstLaunch = false;
                 }
-            }
 
-            @Override
-            public void onStatusChanged(String provider, int status, Bundle extras) {
-            }
+                @Override
+                public void onStatusChanged(String provider, int status, Bundle extras) {
+                }
 
-            @Override
-            public void onProviderEnabled(String provider) {
-            }
+                @Override
+                public void onProviderEnabled(String provider) {
+                }
 
-            @Override
-            public void onProviderDisabled(String provider) {
+                @Override
+                public void onProviderDisabled(String provider) {
+                }
+            };
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        REQUEST_LOCATION_PERMISSION);
+            } else {
+                startLocationUpdates();
             }
-        };
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    REQUEST_LOCATION_PERMISSION);
-        } else {
-            startLocationUpdates();
         }
 
-        mWeatherId = getIntent().getStringExtra("weather_id");
-        weatherlayout.setVisibility(View.INVISIBLE);
-        requestWeather(mWeatherId);
+        else {
 
-        swipeRefresh.setColorSchemeResources(R.color.colorPrimary);
-        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                requestWeather(mWeatherId);
-            }
-        });
+            mWeatherId = getIntent().getStringExtra("weather_id");
+            weatherlayout.setVisibility(View.INVISIBLE);requestWeather(mWeatherId);
+
+            swipeRefresh.setColorSchemeResources(R.color.colorPrimary);
+            swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    requestWeather(mWeatherId);
+                }
+            });
+        }
 
         navButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                drawerLayout.openDrawer(GravityCompat.START);
-            }
+                    drawerLayout.openDrawer(GravityCompat.START);
+                }
         });
     }
 
@@ -166,6 +163,10 @@ public class WeatherActivity extends AppCompatActivity {
         String districtId = null;
         County county = DataSupport.where("countyName = ?", districtName).findFirst(County.class);
         if (county != null) {
+            districtId = county.getWeatherId();
+        }
+        else{
+            county = DataSupport.where("countyName = ?", "长春").findFirst(County.class);
             districtId = county.getWeatherId();
         }
         return districtId;
@@ -210,7 +211,8 @@ public class WeatherActivity extends AppCompatActivity {
     }
 
     public void requestWeather(String weatherId){
-        String weatherUrl = "http://guolin.tech/api/weather?cityid="+weatherId+"&key=f9b4bf7a619140639ce5a4decf556353";
+        String weatherUrl = "http://guolin.tech/api/weather?cityid="+weatherId+"&key=\t\n" +
+                "a1cebe6fa6d1448389c275fcea36a685";
         HttpUtil.sendOkHttpRequest(weatherUrl, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -218,7 +220,7 @@ public class WeatherActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(WeatherActivity.this, "获取天气信息失败", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(WeatherActivity.this, "error", Toast.LENGTH_SHORT).show();
                         swipeRefresh.setRefreshing(false);
                     }
                 });

@@ -2,11 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/coolweather-master.iml" filepath="$PROJECT_DIR$/.idea/modules/coolweather-master.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/coolweather-master.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/coolweather-master.app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/coolweather-master.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/coolweather-master.app.androidTest.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/coolweather-master.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/coolweather-master.app.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/coolweather-master.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/coolweather-master.app.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/weatherapp.iml" filepath="$PROJECT_DIR$/.idea/modules/weatherapp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/weatherapp.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/weatherapp.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/weatherapp.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/weatherapp.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/weatherapp.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/weatherapp.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/weatherapp.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/weatherapp.app.unitTest.iml" />
     </modules>
   </component>
 </project>
